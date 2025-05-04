@@ -1,0 +1,72 @@
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+
+# Auto-generated VS/JetBrains Rider files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Rider-specific
+.idea/
+*.sln.iml
+
+# OS generated files
+.DS_Store
+*.swp
+*.iml
+Thumbs.db
+
+# Unity Cache/Config
+MemoryCaptures/
+*.stacktrace
+
+# Android/Gradle
+.gradle/
+*.apk
+*.aar
+*.keystore
+build.gradle
+gradle-wrapper.jar
+gradle-wrapper.properties
+local.properties
+
+# iOS
+Pods/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdatad
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+
+# Unity Collaborate and Cache
+.collab/
+.cache/
+
+# Crash reports
+sysinfo.txt
+*.dmp
+*.mdmp
+
+# Builds
+Build*/      # if you use a custom name like BuildWebGL/, BuildAndroid/, etc.
+*.exe
+*.app
+*.ipk
+*.xap
+*.unitypackage
+*.zip
+
+# Logs
+*.log
