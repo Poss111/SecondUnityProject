@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private List<GameObject> gameObjects;
 
     public PlayerEnum currentPlayer = PlayerEnum.PlayerX; // Assuming you have a Player enum defined somewhere.
-    
+
     public TMP_Text turnText;
 
     void Awake()
@@ -36,7 +36,14 @@ public class GameManager : MonoBehaviour
     {
         if (turnText != null)
         {
-            turnText.text = "Current Player: " + currentPlayer.ToString();
+            if (currentPlayer == PlayerEnum.PlayerX)
+            {
+                turnText.text = "Player X's Turn";
+            }
+            else
+            {
+                turnText.text = "Player O's Turn";
+            }
         }
         else
         {
@@ -69,7 +76,7 @@ public class GameManager : MonoBehaviour
     {
         // Logic to fill the box goes here.
         // This could involve changing the color of the box, playing an animation, etc.
-        gameBoard[gridX,gridY] = value;
+        gameBoard[gridX, gridY] = value;
         PrintGameBoard();
         CheckIfGameWon();
         NextTurn();
@@ -85,7 +92,7 @@ public class GameManager : MonoBehaviour
             table += i + " -> ";
             for (int j = 0; j < gameBoard.GetLength(1); j++)
             {
-                table += "" + gameBoard[i,j];
+                table += "" + gameBoard[i, j];
             }
             table += "\n";
         }
@@ -127,8 +134,16 @@ public class GameManager : MonoBehaviour
         if (GameManager.Instance.isGameWon == true)
         {
             Debug.Log("Game is won, no reset button available.");
-            // Create a button at position (10, 10) with size (100, 30)
-            if (GUI.Button(new Rect(10, 10, 100, 30), "Reset"))
+            // Display a big "You win!" text in the center of the screen
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 150;
+            style.normal.textColor = Color.white;
+            style.alignment = TextAnchor.MiddleCenter;
+            GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 100), "You win!", style);
+            // Create a button in the center of the screen
+            GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
+            buttonStyle.fontSize = 100; // Set the font size for the button text
+            if (GUI.Button(new Rect(Screen.width / 2 - 250, Screen.height / 2 + 50, 500, 100), "Go Again?", buttonStyle))
             {
                 ResetGame();
             }
@@ -152,5 +167,5 @@ public class GameManager : MonoBehaviour
         }
         isGameWon = false;
     }
-    
+
 }
