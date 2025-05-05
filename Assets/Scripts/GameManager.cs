@@ -38,11 +38,11 @@ public class GameManager : MonoBehaviour
         {
             if (currentPlayer == PlayerEnum.PlayerX)
             {
-                turnText.text = "Player X's Turn";
+                turnText.text = "X's Turn";
             }
             else
             {
-                turnText.text = "Player O's Turn";
+                turnText.text = "O's Turn";
             }
         }
         else
@@ -68,8 +68,6 @@ public class GameManager : MonoBehaviour
     public void WinGame()
     {
         isGameWon = true;
-        Debug.Log("You win!");
-        // Add any additional win logic here, such as showing a UI or transitioning to a new scene.
     }
 
     public void FillBox(int gridX, int gridY, int value)
@@ -79,7 +77,11 @@ public class GameManager : MonoBehaviour
         gameBoard[gridX, gridY] = value;
         PrintGameBoard();
         CheckIfGameWon();
-        NextTurn();
+        if (isGameWon == false)
+        {
+            // Only proceed to the next turn if the game is not won
+            NextTurn();
+        }
     }
 
     // Print out gameboard for ease of debugging
@@ -89,14 +91,13 @@ public class GameManager : MonoBehaviour
         string table = "Game Board:\n";
         for (int i = 0; i < gameBoard.GetLength(0); i++)
         {
-            table += i + " -> ";
+            string row = i + " -> ";
             for (int j = 0; j < gameBoard.GetLength(1); j++)
             {
-                table += "" + gameBoard[i, j];
+                row += "" + gameBoard[i, j] + " ";
             }
-            table += "\n";
+            Debug.Log(row);
         }
-        Debug.Log(table);
     }
 
 
@@ -106,23 +107,23 @@ public class GameManager : MonoBehaviour
         // Check rows, columns, and diagonals for a win condition
         for (int i = 0; i < 3; i++)
         {
-            if (gameBoard[i, 0] == gameBoard[i, 1] && gameBoard[i, 1] == gameBoard[i, 2] && gameBoard[i, 0] != 0)
+            if (gameBoard[i, 0] == gameBoard[i, 1] && gameBoard[i, 1] == gameBoard[i, 2] && (gameBoard[i, 0] == 1 || gameBoard[i, 0] == 2))
             {
                 WinGame();
                 return;
             }
-            if (gameBoard[0, i] == gameBoard[1, i] && gameBoard[1, i] == gameBoard[2, i] && gameBoard[0, i] != 0)
+            if (gameBoard[0, i] == gameBoard[1, i] && gameBoard[1, i] == gameBoard[2, i] && (gameBoard[0, i] == 1 || gameBoard[0, i] == 2))
             {
                 WinGame();
                 return;
             }
         }
-        if (gameBoard[0, 0] == gameBoard[1, 1] && gameBoard[1, 1] == gameBoard[2, 2] && gameBoard[0, 0] != 0)
+        if (gameBoard[0, 0] == gameBoard[1, 1] && gameBoard[1, 1] == gameBoard[2, 2] && (gameBoard[0, 0] == 1 || gameBoard[0, 0] == 2))
         {
             WinGame();
             return;
         }
-        if (gameBoard[0, 2] == gameBoard[1, 1] && gameBoard[1, 1] == gameBoard[2, 0] && gameBoard[0, 2] != 0)
+        if (gameBoard[0, 2] == gameBoard[1, 1] && gameBoard[1, 1] == gameBoard[2, 0] && (gameBoard[0, 2] == 1 || gameBoard[0, 2] == 2))
         {
             WinGame();
             return;
@@ -139,7 +140,7 @@ public class GameManager : MonoBehaviour
             style.fontSize = 150;
             style.normal.textColor = Color.white;
             style.alignment = TextAnchor.MiddleCenter;
-            GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 100), "You win!", style);
+            GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 100), currentPlayer + " wins!", style);
             // Create a button in the center of the screen
             GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
             buttonStyle.fontSize = 100; // Set the font size for the button text
@@ -159,10 +160,14 @@ public class GameManager : MonoBehaviour
         {
             // Reset game object sprite
             GameObject gameObject = gameObjects[i];
-            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null)
+            GameBoard gameboard = gameObject.GetComponent<GameBoard>();
+            if (gameboard != null)
             {
-                spriteRenderer.sprite = null; // Reset to default sprite or assign a specific sprite
+                gameboard.Reset();
+            }
+            else
+            {
+                Debug.LogError("GameBoard component not found on the game object.");
             }
         }
         isGameWon = false;

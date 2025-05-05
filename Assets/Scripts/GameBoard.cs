@@ -6,8 +6,10 @@ using UnityEngine.EventSystems;
 public class GameBoard : MonoBehaviour, IPointerClickHandler
 {
 
-    public Sprite filledSprite;
+    public Sprite xSprite;
+    public Sprite oSprite;
     private SpriteRenderer spriteRenderer;
+    private Sprite originalSprite;
     public int gridX;
     public int gridY;
 
@@ -16,8 +18,20 @@ public class GameBoard : MonoBehaviour, IPointerClickHandler
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
+            originalSprite = spriteRenderer.sprite;
             Debug.LogError("SpriteRenderer component not found on this GameObject.");
             return;
+        }
+    }
+
+    public void Reset()
+    {
+        if (spriteRenderer != null)
+        {
+            // Reset the sprite to the original sprite
+            spriteRenderer.sprite = originalSprite;
+            // Reset the scale to the original size
+            transform.localScale = new Vector3(3f, 3f, 1f);
         }
     }
 
@@ -32,8 +46,20 @@ public class GameBoard : MonoBehaviour, IPointerClickHandler
         {
             // Scale the game object to 0.65 times its original size
             transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+            int player = 1;
             // Change the sprite to the filled sprite
-            spriteRenderer.sprite = filledSprite;
+            if (GameManager.Instance.currentPlayer == PlayerEnum.PlayerX) 
+            {
+                Debug.Log("Player X clicked on grid: " + gridX + ", " + gridY);
+                spriteRenderer.sprite = xSprite;
+            }
+            else if (GameManager.Instance.currentPlayer == PlayerEnum.PlayerO)
+            {
+                Debug.Log("Player O clicked on grid: " + gridX + ", " + gridY);
+                spriteRenderer.sprite = oSprite;
+                player = 2;
+            }
+            GameManager.Instance.FillBox(gridX, gridY, player);
             // Optionally, you can also change the color
             // spriteRenderer.color = new Color(Random.value, Random.value, Random.value);
         }
@@ -41,6 +67,5 @@ public class GameBoard : MonoBehaviour, IPointerClickHandler
         {
             Debug.LogError("SpriteRenderer component not found on this GameObject.");
         }
-        GameManager.Instance.FillBox(gridX, gridY, 1);
     }
 }
