@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using TMPro; // Assuming you are using TextMeshPro for UI text
+using TMPro;
+using System.Text; // Assuming you are using TextMeshPro for UI text
 
 public class GameManager : MonoBehaviour
 {
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
     public void WinGame()
     {
         isGameWon = true;
+
     }
 
     public void FillBox(int gridX, int gridY, int value)
@@ -88,15 +90,19 @@ public class GameManager : MonoBehaviour
     public void PrintGameBoard()
     {
         Debug.Log("X Length: " + gameBoard.GetLength(0) + " Y Length: " + gameBoard.GetLength(1));
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine("Game Board: ");
+        sb.AppendLine("X Length: " + gameBoard.GetLength(0) + " Y Length: " + gameBoard.GetLength(1));
         for (int i = 0; i < gameBoard.GetLength(0); i++)
         {
-            string row = i + " -> ";
+            sb.AppendLine("Row " + i + ": ");
             for (int j = 0; j < gameBoard.GetLength(1); j++)
             {
-                row += "" + gameBoard[i, j] + " ";
+                sb.Append(gameBoard[i, j].ToString() + " ");
             }
-            Debug.Log(row);
+            sb.AppendLine();
         }
+        Debug.Log(sb.ToString());
     }
 
 
@@ -159,14 +165,21 @@ public class GameManager : MonoBehaviour
         {
             // Reset game object sprite
             GameObject gameObject = gameObjects[i];
-            GameBoard gameboard = gameObject.GetComponent<GameBoard>();
-            if (gameboard != null)
+            GameBoard gameboardObj = gameObject.GetComponent<GameBoard>();
+            if (gameboardObj != null)
             {
-                gameboard.Reset();
+                gameboardObj.Reset();
             }
             else
             {
                 Debug.LogError("GameBoard component not found on the game object.");
+            }
+        }
+        for (int i = 0; i < gameBoard.GetLength(0); i++)
+        {
+            for (int j = 0; j < gameBoard.GetLength(1); j++)
+            {
+                gameBoard[i, j] = 0;
             }
         }
         isGameWon = false;
