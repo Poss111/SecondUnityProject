@@ -88,7 +88,6 @@ public class GameManager : MonoBehaviour
     public void PrintGameBoard()
     {
         Debug.Log("X Length: " + gameBoard.GetLength(0) + " Y Length: " + gameBoard.GetLength(1));
-        string table = "Game Board:\n";
         for (int i = 0; i < gameBoard.GetLength(0); i++)
         {
             string row = i + " -> ";
